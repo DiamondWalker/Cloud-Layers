@@ -3,8 +3,8 @@ package com.diamondwalker.cloudlayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.*;
-import net.minecraft.util.Mth;
+import net.minecraft.client.renderer.DimensionSpecialEffects;
+import net.minecraft.client.renderer.LevelRenderer;
 import org.joml.Matrix4f;
 
 public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
@@ -16,7 +16,7 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
     }
 
     @Override
-    public boolean renderClouds(ClientLevel level, int ticks, float partialTick, PoseStack poseStack, double camX, double camY, double camZ, Matrix4f projectionMatrix) {
+    public boolean renderClouds(ClientLevel level, int ticks, float partialTick, PoseStack poseStack, double camX, double camY, double camZ, Matrix4f modelViewMatrix, Matrix4f projectionMatrix) {
         LevelRenderer renderer = Minecraft.getInstance().levelRenderer;
 
         if (layer == 0) {
@@ -28,7 +28,7 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
 
                 renderer.ticks = (int)Math.floor(total);
                 float partial = (float)(total - renderer.ticks);
-                renderer.renderClouds(poseStack, projectionMatrix, partial, camX, camY, camZ);
+                renderer.renderClouds(poseStack, modelViewMatrix, projectionMatrix, partial, camX, camY, camZ);
             }
             layer = 0;
             renderer.ticks = ticks;

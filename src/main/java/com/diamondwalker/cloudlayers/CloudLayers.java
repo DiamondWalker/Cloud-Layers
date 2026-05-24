@@ -1,8 +1,15 @@
 package com.diamondwalker.cloudlayers;
 
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import org.slf4j.Logger;
+
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
+
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -11,41 +18,38 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-import org.slf4j.Logger;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-// The value here should match an entry in the META-INF/mods.toml file
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(CloudLayers.MODID)
-public class CloudLayers
-{
+public class CloudLayers {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "cloudlayers";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
-    public CloudLayers(FMLJavaModLoadingContext context)
-    {
-        context.registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
+    // The constructor for the mod class is the first code that is run when your mod is loaded.
+    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
+    public CloudLayers(IEventBus modEventBus, ModContainer modContainer) {
+        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent

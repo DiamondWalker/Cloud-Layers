@@ -1,0 +1,13 @@
+{
+  "itemGroup.cloudlayers": "Example Mod Tab",
+  "block.cloudlayers.example_block": "Example Block",
+  "item.cloudlayers.example_item": "Example Item",
+
+  "cloudlayers.configuration.title": "Cloud Layers Configs",
+  "cloudlayers.configuration.section.cloudlayers.common.toml": "Cloud Layers Configs",
+  "cloudlayers.configuration.section.cloudlayers.common.toml.title": "Cloud Layers Configs",
+  "cloudlayers.configuration.items": "Item List",
+  "cloudlayers.configuration.logDirtBlock": "Log Dirt Block",
+  "cloudlayers.configuration.magicNumberIntroduction": "Magic Number Text",
+  "cloudlayers.configuration.magicNumber": "Magic Number"
+}
