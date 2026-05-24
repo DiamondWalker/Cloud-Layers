@@ -46,7 +46,7 @@ public class CloudLayers {
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public CloudLayers(IEventBus modEventBus, ModContainer modContainer) {
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
     }
 
     @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
