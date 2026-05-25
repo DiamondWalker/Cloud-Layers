@@ -1,12 +1,14 @@
 package com.diamondwalker.cloudlayers;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
-import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
     private int layer = 0;
@@ -26,6 +28,14 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
                 layers = new CloudLayerCache[Config.LAYER_COUNT.get()];
             }
 
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(
+                GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
+            );
+
             while (layer < Config.LAYER_COUNT.get()) {
                 int index = layer++; // index starts at 0, layer starts at 1
 
@@ -36,17 +46,28 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
 
                 layers[index].load(renderer);
 
-                double total = ((double)partialTick + ticks) * (getCloudHeight() / super.getCloudHeight()); // scale speed by the height
-                total += (layer - 1) * 10_000; // add an offset so they don't all start lined up
+                double total = ((double)partialTick + ticks) * (getCloudHeight() / super.getCloudHeight());
+                total += (layer - 1) * 10_000;
 
                 renderer.ticks = (int)Math.floor(total);
                 float partial = (float)(total - renderer.ticks);
-                renderer.renderClouds(poseStack, projectionMatrix, partial, camX, camY, camZ); // TODO: I think this may affect cloud color due to the different partialTicks
+
+                float alpha = Config.getAlphaForLayer(index);
+                float[] shaderColor = RenderSystem.getShaderColor();
+                RenderSystem.setShaderColor(shaderColor[0], shaderColor[1], shaderColor[2], alpha);
+
+                renderer.renderClouds(poseStack, projectionMatrix, partial, camX, camY, camZ);
+
+                // Restore full opacity before next layer / after last layer
+                RenderSystem.setShaderColor(shaderColor[0], shaderColor[1], shaderColor[2], 1.0f);
 
                 layers[index].copy(renderer);
             }
             layer = 0;
             renderer.ticks = ticks;
+
+            // Restore blend state to vanilla default
+            RenderSystem.defaultBlendFunc();
 
             layers[0].load(renderer);
 
