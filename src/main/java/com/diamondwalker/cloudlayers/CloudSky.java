@@ -41,7 +41,7 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
 
                 renderer.ticks = (int)Math.floor(total);
                 float partial = (float)(total - renderer.ticks);
-                renderer.renderClouds(poseStack, modelViewMatrix, projectionMatrix, partial, camX, camY, camZ);
+                renderer.renderClouds(poseStack, modelViewMatrix, projectionMatrix, partial, camX, camY, camZ); // TODO: I think this may affect cloud color due to the different partialTicks
 
                 layers[index].copy(renderer);
             }
