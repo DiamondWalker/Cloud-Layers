@@ -38,9 +38,11 @@ public class Config
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends Boolean>> FLAT_CLOUDS = BUILDER
             .comment(
-                    "ah"
+                    "Whether each cloud layer, from bottom to top, should render in the 2D \"Fast\" style, even if clouds are set to \"Fancy\" in the video settings.",
+                    "True values mean this layer will always render in the Fast style. False values will make this layer dependent on the user video settings.",
+                    "Example for 3 layers, where the first 2 layers are Fancy and the 3rd is Fast: [false, false, true]"
             )
-            .defineList("forceFastClouds", List.of(true, true),
+            .defineList("forceFastClouds", List.of(false, false),
                     obj -> obj instanceof Boolean);
 
     static final ForgeConfigSpec SPEC = BUILDER.build();

@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
 import org.joml.Matrix4f;
-import org.joml.Vector4f;
 
 public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
     private int layer = 0;
@@ -25,6 +24,10 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
         }
 
         return height;
+    }
+
+    public boolean forceFlatClouds() {
+        return Config.isFastCloudLayer(layer - 1); // we subtract one because we need the index, not the layer number
     }
 
     @Override

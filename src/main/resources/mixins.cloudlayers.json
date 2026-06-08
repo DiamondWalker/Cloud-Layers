@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.diamondwalker.cloudlayers.mixin",
+  "refmap": "mixins.cloudlayers.refmap.json",
+  "setSourceFile": true,
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MixinLevelRenderer"
+  ]
+}
