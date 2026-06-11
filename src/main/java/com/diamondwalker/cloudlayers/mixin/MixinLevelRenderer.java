@@ -38,7 +38,7 @@ public class MixinLevelRenderer {
             at = @At("STORE"),
             name = "d1"
     )
-    private double ah(double value) {
+    private double scaleCloudMovementByHeight(double value) {
         if (level.effects() instanceof CloudSky sky) {
             return sky.modifyCloudLayerPos(value);
         }
