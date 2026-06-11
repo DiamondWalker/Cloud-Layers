@@ -1,16 +1,17 @@
 {
-  "itemGroup.cloudlayers": "Example Mod Tab",
-  "block.cloudlayers.example_block": "Example Block",
-  "item.cloudlayers.example_item": "Example Item",
-
   "cloudlayers.configuration.title": "Cloud Layers Configs",
   "cloudlayers.configuration.section.cloudlayers.common.toml": "Cloud Layers Configs",
   "cloudlayers.configuration.section.cloudlayers.common.toml.title": "Cloud Layers Configs",
   "cloudlayers.configuration.cloudLayers": "Cloud Layers",
-  "cloudlayers.configuration.cloudSpacing": "Cloud Spacing",
+  "cloudlayers.configuration.forceFastClouds": "Force Fast Clouds",
+  "cloudlayers.configuration.layerOpacity": "Layer Opacity",
+  "cloudlayers.configuration.layerSpacings": "Cloud Spacing",
 
-  "cloudlayers.configuration.cloudSpacing.tooltip": "The amount of space between cloud layers",
-  "cloudlayers.configuration.section.cloudlayers.client.toml": "Cloud Layers Configs",
   "cloudlayers.configuration.cloudLayers.tooltip": "The number of cloud layers to render",
+  "cloudlayers.configuration.forceFastClouds.tooltip": "Whether each cloud layer should render in the \"Fast\" style",
+  "cloudlayers.configuration.layerOpacity.tooltip": "The opacity of each cloud layer",
+  "cloudlayers.configuration.layerSpacings.tooltip": "The amount of space between cloud layers",
+
+  "cloudlayers.configuration.section.cloudlayers.client.toml": "Cloud Layers Configs",
   "cloudlayers.configuration.section.cloudlayers.client.toml.title": "Cloud Layers Configs"
 }
