@@ -48,10 +48,10 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
 
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(
-                GlStateManager.SourceFactor.SRC_ALPHA,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                GlStateManager.SourceFactor.ONE,
-                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
+                    GlStateManager.SourceFactor.SRC_ALPHA,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                    GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
             );
 
             while (layer < Config.LAYER_COUNT.get()) {
@@ -73,6 +73,7 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
                 float alpha = Config.getAlphaForLayer(index);
                 if (alpha < 1.0f) {
                     float[] shaderColor = RenderSystem.getShaderColor();
+                    shaderColor = new float[] {shaderColor[0], shaderColor[1], shaderColor[2], shaderColor[3]}; // copy to new reference because original will be modified
                     RenderSystem.setShaderColor(shaderColor[0], shaderColor[1], shaderColor[2], alpha);
 
                     renderer.renderClouds(poseStack, projectionMatrix, partialTick, camX, camY, camZ);
@@ -90,6 +91,7 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
 
             // Restore blend state to vanilla default
             RenderSystem.defaultBlendFunc();
+            RenderSystem.disableBlend();
 
             layers[0].load(renderer);
 
@@ -123,6 +125,10 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
             renderer.prevCloudsType = prevCloudsType;
             renderer.prevCloudColor = prevCloudColor;
             renderer.cloudBuffer = buffer;
+
+            if (renderer.cloudBuffer == null || renderer.cloudBuffer.isInvalid()) {
+                renderer.generateClouds = true;
+            }
         }
     }
 }

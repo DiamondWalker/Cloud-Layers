@@ -15,25 +15,25 @@ public class Config
 
     public static final ForgeConfigSpec.IntValue LAYER_COUNT = BUILDER
             .comment("The number of cloud layers to render")
-            .defineInRange("cloudLayers", 2, 1, Integer.MAX_VALUE);
+            .defineInRange("cloudLayers", 3, 1, Integer.MAX_VALUE);
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends Double>> LAYER_SPACING = BUILDER
             .comment(
                     "Per-layer cloud spacing values. Each entry controls the size of a gap between cloud layers from bottom to top.",
                     "If too few values are provided, the last value is repeated for remaining layers.",
-                    "Example for 3 layers where the 1st and 2nd layers have a spacing of 64 and the 2nd and 3rd layers have a spacing of 32: [64, 32]"
+                    "Example for 3 layers where the 1st and 2nd layers have a spacing of 64 and the 2nd and 3rd layers have a spacing of 32: [64.0, 32.0]"
             )
-            .defineList("layerSpacings", List.of(64.0),
+            .defineList("layerSpacings", List.of(48.0, 48.0),
                     obj -> obj instanceof Double);
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends Double>> LAYER_ALPHAS = BUILDER
             .comment(
-                    "Per-layer alpha (transparency) values. Each entry controls one cloud layer from bottom to top.",
+                    "Per-layer alpha (opacity) values. Each entry controls one cloud layer from bottom to top.",
                     "Values range from 0.0 (fully transparent) to 1.0 (fully opaque).",
                     "If fewer values are provided than cloudLayers, the last value is repeated for remaining layers.",
                     "Example for 5 layers, fading out toward the top: [1.0, 0.85, 0.65, 0.45, 0.25]"
             )
-            .defineList("layerAlphas", List.of(1.0, 1.0),
+            .defineList("layerOpacity", List.of(1.0, 0.5, 0.25),
                     obj -> obj instanceof Double d && d >= 0.0 && d <= 1.0);
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends Boolean>> FLAT_CLOUDS = BUILDER
@@ -42,7 +42,7 @@ public class Config
                     "True values mean this layer will always render in the Fast style. False values will make this layer dependent on the user video settings.",
                     "Example for 3 layers, where the first 2 layers are Fancy and the 3rd is Fast: [false, false, true]"
             )
-            .defineList("forceFastClouds", List.of(false, false),
+            .defineList("forceFastClouds", List.of(false, false, true),
                     obj -> obj instanceof Boolean);
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
