@@ -8,6 +8,7 @@ import net.minecraft.client.CloudStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
 public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
@@ -24,6 +25,12 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
         }
 
         return height;
+    }
+
+    public double modifyCloudLayerPos(double pos) {
+        pos *= (getCloudHeight() / super.getCloudHeight());
+        pos += (layer - 1) * 10_000;
+        return pos;
     }
 
     public boolean forceFlatClouds() {
@@ -57,29 +64,29 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
 
                 layers[index].load(renderer);
 
-                double total = ((double)partialTick + ticks) * (getCloudHeight() / super.getCloudHeight()); // scale speed by the height
+                /*double total = ((double)partialTick + ticks) * (getCloudHeight() / super.getCloudHeight()); // scale speed by the height
                 total += (layer - 1) * 10_000; // add an offset so they don't all start lined up
 
                 renderer.ticks = (int)Math.floor(total);
-                float partial = (float)(total - renderer.ticks);
+                float partial = (float)(total - renderer.ticks);*/
 
                 float alpha = Config.getAlphaForLayer(index);
                 if (alpha < 1.0f) {
                     float[] shaderColor = RenderSystem.getShaderColor();
                     RenderSystem.setShaderColor(shaderColor[0], shaderColor[1], shaderColor[2], alpha);
 
-                    renderer.renderClouds(poseStack, projectionMatrix, partial, camX, camY, camZ);
+                    renderer.renderClouds(poseStack, projectionMatrix, partialTick, camX, camY, camZ);
 
                     // Restore full opacity before next layer / after last layer
                     RenderSystem.setShaderColor(shaderColor[0], shaderColor[1], shaderColor[2], shaderColor[3]);
                 } else {
-                    renderer.renderClouds(poseStack, projectionMatrix, partial, camX, camY, camZ);
+                    renderer.renderClouds(poseStack, projectionMatrix, partialTick, camX, camY, camZ);
                 }
 
                 layers[index].copy(renderer);
             }
             layer = 0;
-            renderer.ticks = ticks;
+            //renderer.ticks = ticks;
 
             // Restore blend state to vanilla default
             RenderSystem.defaultBlendFunc();
@@ -97,6 +104,7 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
         private int prevCloudY;
         private int prevCloudZ;
         private CloudStatus prevCloudsType;
+        private Vec3 prevCloudColor;
         private VertexBuffer buffer;
 
         void copy(LevelRenderer renderer) {
@@ -104,6 +112,7 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
             prevCloudY = renderer.prevCloudY;
             prevCloudZ = renderer.prevCloudZ;
             prevCloudsType = renderer.prevCloudsType;
+            prevCloudColor = renderer.prevCloudColor;
             buffer = renderer.cloudBuffer;
         }
 
@@ -112,6 +121,7 @@ public class CloudSky extends DimensionSpecialEffects.OverworldEffects {
             renderer.prevCloudY = prevCloudY;
             renderer.prevCloudZ = prevCloudZ;
             renderer.prevCloudsType = prevCloudsType;
+            renderer.prevCloudColor = prevCloudColor;
             renderer.cloudBuffer = buffer;
         }
     }

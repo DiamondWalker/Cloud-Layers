@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(LevelRenderer.class)
 public class MixinLevelRenderer {
@@ -30,5 +31,18 @@ public class MixinLevelRenderer {
         }
 
         return status;
+    }
+
+    @ModifyVariable(
+            method = "renderClouds",
+            at = @At("STORE"),
+            name = "d1"
+    )
+    private double ah(double value) {
+        if (level.effects() instanceof CloudSky sky) {
+            return sky.modifyCloudLayerPos(value);
+        }
+
+        return value;
     }
 }
